@@ -39,3 +39,15 @@ jobs:
           # GitHub sets the GITHUB_TOKEN secret automatically.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+      - name: Generate SHASUMS
+        run: |
+            cd dist
+            find . -type f -name "*.zip" -exec shasum -a 256 {} \; > SHA256SUMS
+            gpg --batch --detach-sign --armor --local-user ${{ steps.import_gpg.outputs.fingerprint }} SHA256SUMS
+      - name: Upload SHASUMS files
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: shasums
+          path: |
+            dist/SHA256SUMS
+            dist/SHA256SUMS.asc
