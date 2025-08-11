@@ -35,6 +35,7 @@ checksum:
 
 signs:
   - artifacts: checksum
+    cmd: gpg
     args:
       - "--batch"
       - "--local-user"
@@ -49,4 +50,4 @@ release:
   draft: true
 
 changelog:
-  skip: true
+  disable: true
